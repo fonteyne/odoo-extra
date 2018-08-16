@@ -301,11 +301,12 @@ class runbot_repo(osv.osv):
         repo.git(['fetch', '-p', 'origin', '+refs/pull/*/head:refs/pull/*'])
 
         fields = ['refname','objectname','committerdate:iso8601','authorname','authoremail','subject','committername','committeremail']
-        fmt = "'" + "%00".join(["%("+field+")" for field in fields]) + "'"
+        fmt = "%00".join(["%("+field+")" for field in fields])
         git_refs = repo.git(['for-each-ref', '--format', fmt, '--sort=-committerdate', 'refs/heads', 'refs/pull'])
         git_refs = git_refs.strip()
 
         refs = [[decode_utf(field) for field in line.split('\x00')] for line in git_refs.split('\n')]
+        _logger.debug(refs)
 
         for name, sha, date, author, author_email, subject, committer, committer_email in refs:
             # create or get branch
