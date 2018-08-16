@@ -318,8 +318,8 @@ class runbot_repo(osv.osv):
                 branch_id = Branch.create(cr, uid, {'repo_id': repo.id, 'name': name})
             branch = Branch.browse(cr, uid, [branch_id], context=context)[0]
             # skip build for old branches
-            if dateutil.parser.parse(date[:19]) + datetime.timedelta(30) < datetime.datetime.now():
-                continue
+            # if dateutil.parser.parse(date[:19]) + datetime.timedelta(30) < datetime.datetime.now():
+            #     continue
             # create build (and mark previous builds as skipped) if not found
             build_ids = Build.search(cr, uid, [('branch_id', '=', branch.id), ('name', '=', sha)])
             if not build_ids:
